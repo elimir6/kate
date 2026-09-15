@@ -1,0 +1,852 @@
+/* ==========================================
+   1. ГЛОБАЛЬНЫЕ СТИЛИ И ЦВЕТОВАЯ ПАЛИТРА
+   ========================================== */
+:root {
+  --burgundy-deep: #4A000A;
+  --burgundy: #6B0000;
+  --burgundy-light: #8B001A;
+  --burgundy-bright: #A3122A;
+  --pink-soft: #FFD1DC;
+  --pink-light: #FFF0F3;
+  --pink-medium: #FFB6C1;
+  --pink-accent: #FF8DA1;
+  --cream: #FFFDF9;
+  --gold: #D4AF37;
+  --gold-light: #F3E5AB;
+  --text-dark: #3A0007;
+  --text-light: #FFFFFF;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 15px 35px rgba(74, 0, 10, 0.35);
+  --font-hand: 'Marck Script', cursive;
+  --font-main: 'Montserrat', sans-serif;
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-main);
+  background-color: var(--pink-soft);
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* Правило для фотографий в полароидах */
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+/* Свойства для картинок букета и торта */
+.flowers-photo, .cake-photo {
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  /* Убираем mix-blend-mode, чтобы сохранить естественные сочные цвета */
+  mix-blend-mode: normal !important;
+  /* Добавляем мягкую красивую тень вокруг объекта */
+  filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.25));
+  object-fit: contain;
+}
+
+/* Фоновый узор "Виши" (Gingham checkered pattern) */
+.bg-gingham {
+  background-color: #F8C8D4;
+  background-image: 
+    linear-gradient(90deg, rgba(107, 0, 0, 0.12) 50%, transparent 50%),
+    linear-gradient(rgba(107, 0, 0, 0.12) 50%, transparent 50%);
+  background-size: 36px 36px;
+}
+
+/* ==========================================
+   2. ФИКСИРОВАННАЯ ШАПКА (HEADER)
+   ========================================== */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(107, 0, 0, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.nav-list {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  align-items: center;
+  max-width: 1100px;
+  width: 100%;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 5px 0;
+  scrollbar-width: none;
+}
+
+.nav-list::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 209, 220, 0.3);
+  color: var(--pink-light);
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-smooth);
+}
+
+.nav-btn:hover {
+  background: rgba(255, 209, 220, 0.2);
+  border-color: var(--pink-soft);
+  color: #FFF;
+  transform: translateY(-2px);
+}
+
+.nav-btn.active {
+  background: var(--pink-soft);
+  color: var(--burgundy-deep);
+  font-weight: 700;
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(255, 209, 220, 0.6);
+}
+
+.sound-toggle {
+  position: absolute;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--gold);
+  color: #FFF;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  font-size: 1.1rem;
+}
+
+.sound-toggle:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   3. СТРУКТУРА SPA И ПЕРЕХОДЫ
+   ========================================== */
+.app-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 70px;
+}
+
+.screen {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, visibility 0.5s;
+  transform: translateY(20px) scale(0.98);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  z-index: 1;
+}
+
+.screen.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  z-index: 10;
+}
+
+/* Заголовки */
+.heading-handwritten {
+  font-family: var(--font-hand);
+  font-size: clamp(2.8rem, 6.5vw, 4.5rem);
+  color: var(--burgundy);
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7);
+  line-height: 1.2;
+}
+
+.heading-handwritten.light {
+  color: var(--pink-soft);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.heading-sub {
+  font-size: clamp(1.1rem, 2.8vw, 1.6rem);
+  font-weight: 500;
+  color: var(--pink-light);
+  text-align: center;
+  margin-bottom: 35px;
+  letter-spacing: 1px;
+}
+
+/* ==========================================
+   4. ЭКРАН 1: "С ДНЁМ РОЖДЕНИЯ"
+   ========================================== */
+#screen-1 {
+  background: radial-gradient(circle at center, #FFE4E9 0%, #FFD1DC 70%, #FBA1B7 100%);
+}
+
+.screen1-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 20px 0;
+  position: relative;
+}
+
+.envelope-wrapper {
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.envelope-wrapper:hover {
+  transform: scale(1.04) translateY(-5px);
+}
+
+.envelope-svg {
+  width: clamp(280px, 45vw, 380px);
+  height: auto;
+  filter: drop-shadow(0 15px 25px rgba(107, 0, 0, 0.3));
+}
+
+.envelope-hint {
+  margin-top: 25px;
+  font-size: 1.1rem;
+  color: var(--burgundy-deep);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 12px 26px;
+  border-radius: 30px;
+  border: 2px dashed var(--burgundy);
+  animation: pulse 2s infinite;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.envelope-hint:hover {
+  background: #FFF;
+  transform: scale(1.06);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(107, 0, 0, 0.3); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(107, 0, 0, 0); }
+}
+
+.floating-decor {
+  animation: float 4s ease-in-out infinite;
+}
+
+.floating-decor.delayed {
+  animation-delay: 2s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(3deg); }
+}
+
+/* ==========================================
+   5. ЭКРАН 2: "ТВОЙ СЮРПРИЗ"
+   ========================================== */
+#screen-2 {
+  background: radial-gradient(circle at center, #8B001A 0%, #6B0000 60%, #4A000A 100%);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  max-width: 950px;
+  width: 100%;
+  margin: 30px 0;
+}
+
+.surprise-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 209, 220, 0.3);
+  border-radius: 24px;
+  padding: 35px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.surprise-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.surprise-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--gold);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.surprise-card:hover::before {
+  opacity: 1;
+}
+
+.surprise-card-icon {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.3));
+  transition: transform 0.4s ease;
+}
+
+.surprise-card:hover .surprise-card-icon {
+  transform: scale(1.15) rotate(4deg);
+}
+
+.surprise-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--pink-light);
+  letter-spacing: 2px;
+}
+
+.back-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(255, 209, 220, 0.2);
+  border: 2px solid var(--pink-soft);
+  color: var(--pink-soft);
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.back-btn:hover {
+  background: var(--pink-soft);
+  color: var(--burgundy-deep);
+  transform: scale(1.1) translateX(-3px);
+}
+
+/* ==========================================
+   6. ЭКРАН 3: "СООБЩЕНИЕ"
+   ========================================== */
+.letter-card {
+  background: var(--cream);
+  border-radius: 16px;
+  max-width: 800px;
+  width: 100%;
+  padding: 50px 40px;
+  position: relative;
+  box-shadow: var(--shadow-lg), 0 0 0 12px rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(107, 0, 0, 0.15);
+  margin: 20px 0;
+}
+
+.corner-bow {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.corner-bow.top-left { top: -15px; left: -15px; transform: rotate(-15deg); }
+.corner-bow.top-right { top: -15px; right: -15px; transform: rotate(15deg); }
+.corner-bow.bottom-left { bottom: -15px; left: -15px; transform: rotate(-105deg); }
+.corner-bow.bottom-right { bottom: -15px; right: -15px; transform: rotate(105deg); }
+
+.letter-header {
+  font-family: var(--font-hand);
+  font-size: clamp(2.3rem, 4.5vw, 3.2rem);
+  color: var(--burgundy);
+  margin-bottom: 25px;
+  border-bottom: 2px dashed rgba(107, 0, 0, 0.2);
+  padding-bottom: 12px;
+  text-align: center;
+}
+
+.letter-paragraph {
+  font-size: clamp(1rem, 2.1vw, 1.18rem);
+  line-height: 1.8;
+  color: #2C0006;
+  text-align: justify;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+.letter-footer {
+  font-family: var(--font-hand);
+  font-size: 2.2rem;
+  color: var(--burgundy-bright);
+  text-align: right;
+  margin-top: 15px;
+}
+
+/* ==========================================
+   7. ЭКРАН 4: "ЦВЕТЫ"
+   ========================================== */
+#screen-4 {
+  background: radial-gradient(circle at center, #7A0015 0%, #58000F 70%, #380009 100%);
+}
+
+.flowers-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1080px;
+  width: 100%;
+  position: relative;
+}
+
+.flowers-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 30px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.tiles-column {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  flex: 1;
+  min-width: 260px;
+}
+
+.flower-tile {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 209, 220, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 18px;
+  padding: 20px 24px;
+  color: var(--pink-light);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.5;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: var(--transition-smooth);
+}
+
+.flower-tile:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(1.04);
+  border-color: var(--pink-soft);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+.bouquet-wrapper {
+  flex: 1.2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 280px;
+}
+
+.flowers-caption {
+  margin-top: 25px;
+  font-family: var(--font-hand);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--pink-soft);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* ==========================================
+   8. ЭКРАН 5: "ТОРТ И ГАЛЕРЕЯ (6 РАМОК)"
+   ========================================== */
+.cake-gallery-container {
+  display: grid;
+  grid-template-columns: 1fr 320px 1fr;
+  gap: 25px;
+  align-items: center;
+  justify-items: center;
+  max-width: 1250px;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.gallery-side {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+  align-items: center;
+}
+
+/* Стили Полароидов */
+.polaroid-frame {
+  background: #FFFFFF;
+  padding: 12px 12px 42px 12px;
+  border-radius: 6px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+  transition: var(--transition-smooth);
+  width: 215px;
+  position: relative;
+  cursor: pointer;
+}
+
+.polaroid-frame:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  z-index: 30;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+}
+
+.polaroid-img-box {
+  width: 100%;
+  height: 180px;
+  background: #F4E8EB;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.polaroid-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  color: var(--burgundy);
+  padding: 0 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Повороты для 6 рамок */
+.polaroid-bow {
+  transform: rotate(-5deg);
+}
+
+.polaroid-red-bow {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 35px;
+  z-index: 5;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.polaroid-mid-left { transform: rotate(4deg); }
+.polaroid-bottom-left { transform: rotate(-3deg); }
+.polaroid-top-right { transform: rotate(4deg); }
+.polaroid-mid-right { transform: rotate(-4deg); }
+.polaroid-bottom-right { transform: rotate(5deg); }
+
+/* Интерактивный Торт и Огонь Свечи */
+.cake-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.cake-interactive-box {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.cake-interactive-box:hover {
+  transform: scale(1.03);
+}
+
+.candle-flame-container {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 32px;
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.flame-core {
+  width: 14px;
+  height: 22px;
+  background: radial-gradient(circle, #FFF 10%, #FFD700 40%, #FF4500 90%);
+  border-radius: 50% 50% 35% 35%;
+  margin: 0 auto;
+  box-shadow: 0 0 12px #FFD700, 0 0 22px #FF4500;
+  animation: flameFlicker 1.2s ease-in-out infinite alternate;
+}
+
+.flame-outer-glow {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 22px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.45);
+  filter: blur(5px);
+  animation: glowPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes flameFlicker {
+  0% { transform: scale(1) rotate(-2deg); }
+  50% { transform: scale(1.12) rotate(2deg); }
+  100% { transform: scale(0.95) rotate(-1deg); }
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0.5; }
+  100% { opacity: 0.95; }
+}
+
+.wish-status-text {
+  margin-top: 10px;
+  font-family: var(--font-hand);
+  font-size: 1.8rem;
+  color: var(--burgundy-bright);
+  font-weight: bold;
+  text-shadow: 0 2px 8px rgba(255, 209, 220, 0.8);
+  min-height: 35px;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.blow-candles-btn {
+  margin-top: 15px;
+  background: var(--burgundy);
+  color: var(--pink-soft);
+  border: 2px solid var(--gold);
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
+.blow-candles-btn:hover {
+  background: var(--burgundy-light);
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(107, 0, 0, 0.4);
+}
+
+.vinyl-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.vinyl-disk {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #222 25%, #111 26%, #333 40%, #111 55%, #222 70%, #000 100%);
+  border: 4px solid #111;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.vinyl-disk:hover {
+  transform: scale(1.08);
+}
+
+.vinyl-disk.spinning {
+  animation: spinVinyl 3s linear infinite;
+}
+
+@keyframes spinVinyl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.vinyl-center {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--burgundy-bright);
+  border: 3px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.vinyl-label {
+  margin-top: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--burgundy-deep);
+  text-align: center;
+}
+
+/* Конфетти Canvas */
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ==========================================
+   9. АДАПТИВНОСТЬ (@media)
+   ========================================== */
+@media (max-width: 980px) {
+  .cake-gallery-container {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .gallery-side {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .polaroid-frame {
+    transform: rotate(0deg) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 60px;
+    padding: 0 10px;
+  }
+  
+  .app-container {
+    padding-top: 60px;
+  }
+
+  .screen {
+    top: 60px;
+    min-height: calc(100vh - 60px);
+    padding: 20px 15px;
+  }
+
+  .nav-list {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .nav-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .sound-toggle {
+    display: none;
+  }
+
+  .screen1-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .floating-decor {
+    display: none;
+  }
+
+  .letter-card {
+    padding: 35px 20px;
+  }
+
+  .corner-bow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .flowers-layout {
+    flex-direction: column;
+  }
+}
