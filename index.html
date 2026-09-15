@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>С Днём Рождения! ❤️</title>
+  
+  <!-- Google Fonts: Marck Script и Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Подключение файла стилей -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Canvas для анимации праздничного конфетти -->
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+  <!-- Фиксированная навигационная шапка -->
+  <header class="header">
+    <ul class="nav-list">
+      <li><button class="nav-btn active" data-screen="1">С Днём Рождения</button></li>
+      <li><button class="nav-btn" data-screen="2">Твой Сюрприз</button></li>
+      <li><button class="nav-btn" data-screen="3">Сообщение</button></li>
+      <li><button class="nav-btn" data-screen="4">Цветы</button></li>
+      <li><button class="nav-btn" data-screen="5">Торт</button></li>
+    </ul>
+
+    <!-- Переключатель звука -->
+    <button class="sound-toggle" id="sound-toggle-btn" title="Включить / выключить звук">🔊</button>
+  </header>
+
+  <!-- Основной контейнер SPA экранов -->
+  <main class="app-container">
+
+    <!-- ==========================================
+         ЭКРАН 1: "С ДНЁМ РОЖДЕНИЯ"
+         ========================================== -->
+    <section class="screen active" id="screen-1">
+      <h1 class="heading-handwritten">С Днём Рождения!</h1>
+
+      <div class="screen1-content">
+        <!-- Декор слева: Сердечки -->
+        <div class="floating-decor">
+          <svg width="70" height="120" viewBox="0 0 70 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25 35C25 25 35 15 45 25C55 15 65 25 65 35C65 50 45 65 45 65C45 65 25 50 25 35Z" fill="#8B001A" opacity="0.85"/>
+            <path d="M5 75C5 67 13 60 21 68C29 60 37 67 37 75C37 87 21 98 21 98C21 98 5 87 5 75Z" fill="#FF8DA1" opacity="0.9"/>
+          </svg>
+        </div>
+
+        <!-- Центральный интерактивный конверт -->
+        <div class="envelope-wrapper" id="envelope-btn" title="Нажми, чтобы открыть!">
+          <svg class="envelope-svg" viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="200" cy="265" rx="170" ry="12" fill="#4A000A" opacity="0.25"/>
+            <rect x="20" y="40" width="360" height="210" rx="12" fill="#6B0000" stroke="#4A000A" stroke-width="4"/>
+            <path d="M20 40 L200 160 L380 40 Z" fill="#8B001A"/>
+            <path d="M20 250 L160 145" stroke="#4A000A" stroke-width="3" opacity="0.6"/>
+            <path d="M380 250 L240 145" stroke="#4A000A" stroke-width="3" opacity="0.6"/>
+            <path d="M20 40 L200 170 L380 40" fill="#7A0015" stroke="#58000F" stroke-width="3"/>
+            
+            <!-- Сургучная золотая печать -->
+            <circle cx="200" cy="155" r="28" fill="url(#wax-gold)" stroke="#B8860B" stroke-width="2"/>
+            <path d="M192 155C192 148 197 143 200 148C203 143 208 148 208 155C208 162 200 167 200 167C200 167 192 162 192 155Z" fill="#6B0000"/>
+            
+            <defs>
+              <linearGradient id="wax-gold" x1="172" y1="127" x2="228" y2="183" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFE599"/>
+                <stop offset="0.5" stop-color="#D4AF37"/>
+                <stop offset="1" stop-color="#996515"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Декор справа: Шарики -->
+        <div class="floating-decor delayed">
+          <svg width="90" height="150" viewBox="0 0 90 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 65 Q 40 100 45 140" stroke="#6B0000" stroke-width="1.5" opacity="0.5"/>
+            <path d="M60 55 Q 45 95 45 140" stroke="#6B0000" stroke-width="1.5" opacity="0.5"/>
+            <path d="M45 75 Q 50 110 45 140" stroke="#6B0000" stroke-width="1.5" opacity="0.5"/>
+            <ellipse cx="30" cy="40" rx="22" ry="28" fill="#8B001A"/>
+            <ellipse cx="23" cy="30" rx="6" ry="10" fill="#FFF" opacity="0.3"/>
+            <ellipse cx="60" cy="30" rx="20" ry="25" fill="#FF8DA1"/>
+            <ellipse cx="54" cy="22" rx="5" ry="8" fill="#FFF" opacity="0.4"/>
+            <ellipse cx="45" cy="55" rx="18" ry="22" fill="#D4AF37"/>
+            <ellipse cx="40" cy="48" rx="4" ry="7" fill="#FFF" opacity="0.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <button class="envelope-hint" id="envelope-hint-btn">Нажмите на конверт, чтобы открыть ❤️</button>
+    </section>
+
+    <!-- ==========================================
+         ЭКРАН 2: "ТВОЙ СЮРПРИЗ"
+         ========================================== -->
+    <section class="screen" id="screen-2">
+      <h2 class="heading-handwritten light">Выбери свой сюрприз</h2>
+      <p class="heading-sub">Нажми на одну из карточек ниже</p>
+
+      <div class="cards-grid">
+        <!-- Сообщение -->
+        <div class="surprise-card" data-target-screen="3">
+          <svg class="surprise-card-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="25" width="80" height="55" rx="8" fill="#FFD1DC" stroke="#FFF" stroke-width="3"/>
+            <path d="M10 30 L50 60 L90 30" stroke="#6B0000" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="50" cy="58" r="8" fill="#8B001A"/>
+            <path d="M47 58C47 55 49 53 50 55C51 53 53 55 53 58C53 60 50 62 50 62C50 62 47 60 47 58Z" fill="#FFF"/>
+          </svg>
+          <span class="surprise-card-title">СООБЩЕНИЕ</span>
+        </div>
+
+        <!-- Цветы -->
+        <div class="surprise-card" data-target-screen="4">
+          <svg class="surprise-card-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="35" r="14" fill="#FF8DA1"/>
+            <circle cx="35" cy="45" r="14" fill="#FFB6C1"/>
+            <circle cx="65" cy="45" r="14" fill="#FFB6C1"/>
+            <circle cx="40" cy="60" r="14" fill="#FF8DA1"/>
+            <circle cx="60" cy="60" r="14" fill="#FF8DA1"/>
+            <circle cx="50" cy="48" r="10" fill="#D4AF37"/>
+            <path d="M50 65 L50 90" stroke="#4A7C59" stroke-width="5" stroke-linecap="round"/>
+            <path d="M50 78 Q 35 70 30 75" stroke="#4A7C59" stroke-width="4" stroke-linecap="round" fill="none"/>
+          </svg>
+          <span class="surprise-card-title">ЦВЕТЫ</span>
+        </div>
+
+        <!-- Торт -->
+        <div class="surprise-card" data-target-screen="5">
+          <svg class="surprise-card-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="55" width="60" height="30" rx="4" fill="#FFD1DC"/>
+            <rect x="28" y="38" width="44" height="20" rx="4" fill="#FFF0F3"/>
+            <path d="M20 55 Q 30 63 40 55 Q 50 63 60 55 Q 70 63 80 55" fill="none" stroke="#8B001A" stroke-width="4"/>
+            <circle cx="50" cy="24" r="5" fill="#D4AF37"/>
+            <path d="M50 19 Q 52 14 50 10 Q 48 14 50 19Z" fill="#FF4500"/>
+            <circle cx="36" cy="38" r="4" fill="#A3122A"/>
+            <circle cx="64" cy="38" r="4" fill="#A3122A"/>
+          </svg>
+          <span class="surprise-card-title">ТОРТ</span>
+        </div>
+      </div>
+
+      <!-- Кнопка "Назад" -->
+      <button class="back-btn" id="back-to-1-btn" title="Вернуться к началу">←</button>
+    </section>
+
+    <!-- ==========================================
+         ЭКРАН 3: "СООБЩЕНИЕ" (Письмо)
+         ========================================== -->
+    <section class="screen bg-gingham" id="screen-3">
+      <div class="letter-card">
+        <!-- Бантики по углам -->
+        <svg class="corner-bow top-left" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 30 C15 10 5 25 30 30 C55 25 45 10 30 30 Z" fill="#8B001A"/>
+          <path d="M30 30 C10 45 25 55 30 30 C35 55 50 45 30 30 Z" fill="#6B0000"/>
+          <circle cx="30" cy="30" r="5" fill="#D4AF37"/>
+        </svg>
+
+        <svg class="corner-bow top-right" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 30 C15 10 5 25 30 30 C55 25 45 10 30 30 Z" fill="#8B001A"/>
+          <path d="M30 30 C10 45 25 55 30 30 C35 55 50 45 30 30 Z" fill="#6B0000"/>
+          <circle cx="30" cy="30" r="5" fill="#D4AF37"/>
+        </svg>
+
+        <svg class="corner-bow bottom-left" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 30 C15 10 5 25 30 30 C55 25 45 10 30 30 Z" fill="#8B001A"/>
+          <path d="M30 30 C10 45 25 55 30 30 C35 55 50 45 30 30 Z" fill="#6B0000"/>
+          <circle cx="30" cy="30" r="5" fill="#D4AF37"/>
+        </svg>
+
+        <svg class="corner-bow bottom-right" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 30 C15 10 5 25 30 30 C55 25 45 10 30 30 Z" fill="#8B001A"/>
+          <path d="M30 30 C10 45 25 55 30 30 C35 55 50 45 30 30 Z" fill="#6B0000"/>
+          <circle cx="30" cy="30" r="5" fill="#D4AF37"/>
+        </svg>
+
+        <h2 class="letter-header">С днём рождения, наша любимая! 💗</h2>
+        
+        <p class="letter-paragraph">
+          Сегодня твой день, и нам хочется сказать тебе чуть больше, чем банальное «счастья, здоровья и чтобы всё сбывалось». Потому что ты для нас — намного больше, чем просто подруга. Ты человек, который стал частью наших самых смешных историй, самых тёплых воспоминаний и самых важных моментов. 🫶🏻
+        </p>
+
+        <p class="letter-paragraph">
+          Мы очень ценим, что наша жизнь сложилась именно так, что в ней есть ты. С тобой можно смеяться до слёз над самыми глупыми вещами, обсуждать всё на свете, придумывать безумные планы и быть собой, не боясь быть непонятой.
+        </p>
+
+        <p class="letter-paragraph">
+          Спасибо тебе за то, какая ты есть. За твою доброту, за твою улыбку, за твою искренность и просто за то, что рядом с тобой всегда становится немного теплее. Мы тебя очень сильно любим и безумно дорожим тобой. 💕
+        </p>
+
+        <p class="letter-paragraph">
+          С днём рождения, родная! Пусть этот год станет одной из самых красивых глав в твоей жизни. И пусть впереди будет ещё миллион счастливых страниц — и мы очень надеемся, что будем на них вместе с тобой. 💗✨
+        </p>
+
+        <div class="letter-footer">С любовью и нежностью ❤️</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         ЭКРАН 4: "ЦВЕТЫ"
+         ========================================== -->
+    <section class="screen" id="screen-4">
+      <div class="flowers-container">
+        
+        <div class="flowers-layout">
+          <!-- Левая колонка пожеланий -->
+          <div class="tiles-column">
+            <div class="flower-tile">
+              Желаем встречать людей, после которых не хочется удалить все соцсети и уехать жить в лес!! 🌲📵
+            </div>
+            <div class="flower-tile">
+              Чтобы голуби никогда не выбирали тебя своей мишенью 🕊️🚫
+            </div>
+          </div>
+
+          <!-- Изображение букета в центре -->
+          <div class="bouquet-wrapper">
+            <img src="flowers.png" alt="Букет" class="flowers-photo">
+          </div>
+
+          <!-- Правая колонка пожеланий -->
+          <div class="tiles-column">
+            <div class="flower-tile">
+              Чтобы проблемы решались сами, пока ты занята чем-то гораздо более интересным 🍰🪄
+            </div>
+            <div class="flower-tile">
+              Чтобы твоя жизнь была как сериал, только без сезонов, где всё идет не так 🎬🍿
+            </div>
+          </div>
+        </div>
+
+        <p class="flowers-caption">Букет, собранный с любовью ❤️</p>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         ЭКРАН 5: "ТОРТ И ГАЛЕРЕЯ"
+         ========================================== -->
+    <section class="screen bg-gingham" id="screen-5">
+      <h2 class="heading-handwritten">С Днём Рождения!</h2>
+
+      <div class="cake-gallery-container">
+        
+        <!-- ЛЕВАЯ КОЛОНКА РАМОК -->
+        <div class="gallery-side gallery-left">
+          
+          <!-- 1. Polaroid 1 -->
+          <div class="polaroid-frame polaroid-bow" title="Лучшие обнимашки">
+            <svg class="polaroid-red-bow" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30 20 C10 5 2 15 30 20 C58 15 50 5 30 20 Z" fill="#A3122A"/>
+              <path d="M30 20 C10 32 20 38 30 20 C40 38 50 32 30 20 Z" fill="#6B0000"/>
+              <circle cx="30" cy="20" r="5" fill="#D4AF37"/>
+            </svg>
+            <div class="polaroid-img-box">
+              <img src="photo1.jpg" alt="Обнимашки">
+            </div>
+            <div class="polaroid-caption">Лучшие обнимашки 🤍</div>
+          </div>
+
+          <!-- 2. Polaroid 2 -->
+          <div class="polaroid-frame polaroid-mid-left" title="Любимые носы">
+            <div class="polaroid-img-box">
+              <img src="photo2.jpg" alt="Любимые носы">
+            </div>
+            <div class="polaroid-caption">Самые родные 📸</div>
+          </div>
+
+          <!-- 3. Polaroid 6 -->
+          <div class="polaroid-frame polaroid-bottom-left" title="Главный позитив">
+            <div class="polaroid-img-box">
+              <img src="photo6.jpg" alt="Главный позитив">
+            </div>
+            <div class="polaroid-caption">Наш главный позитив 🤪✨</div>
+          </div>
+
+        </div>
+
+        <!-- ЦЕНТРАЛЬНЫЙ ТОРТ С ИНТЕРАКТИВНОЙ СВЕЧОЙ -->
+        <div class="cake-wrapper">
+          <div class="cake-interactive-box" id="cake-interactive-area" title="Нажми, чтобы задуть или зажечь свечу!">
+            <!-- Интерактивная свеча со свечением -->
+            <div class="candle-flame-container" id="candle-flame-group">
+              <div class="flame-core"></div>
+              <div class="flame-outer-glow"></div>
+            </div>
+            <!-- Изображение торта -->
+            <img src="cake.png" alt="Торт" class="cake-photo" id="cake-img">
+          </div>
+
+          <!-- Текст статуса желания -->
+          <div class="wish-status-text" id="wish-status"></div>
+
+          <!-- Кнопка управления свечой -->
+          <button class="blow-candles-btn" id="blow-btn">Задуть свечу и загадать желание 🎂</button>
+
+          <!-- Вращающаяся виниловая пластинка -->
+          <div class="vinyl-wrapper">
+            <div class="vinyl-disk" id="vinyl-btn" title="Нажми для воспроизведения музыки!">
+              <div class="vinyl-center">PRESS</div>
+            </div>
+            <div class="vinyl-label" id="vinyl-status-text">Нажми на пластинку, чтобы заиграла музыка 🎵</div>
+          </div>
+        </div>
+
+        <!-- ПРАВАЯ КОЛОНКА РАМОК -->
+        <div class="gallery-side gallery-right">
+          
+          <!-- 4. Polaroid 3 -->
+          <div class="polaroid-frame polaroid-top-right" title="Банда">
+            <div class="polaroid-img-box">
+              <img src="photo3.jpg" alt="Банда">
+            </div>
+            <div class="polaroid-caption">Банда в сборе ✌️</div>
+          </div>
+
+          <!-- 5. Polaroid 4 -->
+          <div class="polaroid-frame polaroid-mid-right" title="Закат">
+            <div class="polaroid-img-box">
+              <img src="photo4.jpg" alt="Закат">
+            </div>
+            <div class="polaroid-caption">Главное солнышко 🌅</div>
+          </div>
+
+          <!-- 6. Polaroid 5 -->
+          <div class="polaroid-frame polaroid-bottom-right" title="В машине">
+            <div class="polaroid-img-box">
+              <img src="photo5.jpg" alt="В машине">
+            </div>
+            <div class="polaroid-caption">Слишком крутые 🕶️🔥</div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Подключение скрипта -->
+  <script src="script.js"></script>
+</body>
+</html>
